@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChatHub - Real-time Chat Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Join Section -->
+      <div id="join-section" class="auth-container">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h1>ChatHub</h1>
+            <p class="tagline">Connect. Chat. Share.</p>
+          </div>
+          <form id="join-form" class="auth-form">
+            <div class="form-group">
+              <input
+                id="username"
+                type="text"
+                placeholder="Your Name"
+                required
+                autocomplete="off"
+                maxlength="20"
+              />
+              <span class="input-focus"></span>
+            </div>
+            <div class="form-group">
+              <input
+                id="room"
+                type="text"
+                placeholder="Room Code"
+                required
+                autocomplete="off"
+                maxlength="50"
+              />
+              <span class="input-focus"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Join Room</button>
+            <p class="help-text">💡 Share the room code with friends to chat together</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div id="chat-section" class="chat-container">
+        <div class="chat-header">
+          <div class="header-info">
+            <h2 id="room-name">ChatHub</h2>
+            <span id="user-info" class="user-badge"></span>
+          </div>
+          <button id="leave-btn" class="btn btn-secondary btn-small">Leave</button>
+        </div>
+
+        <div class="chat-main">
+          <div id="message-container" class="message-container">
+            <ul id="messages" class="messages-list"></ul>
+          </div>
+
+          <!-- Users Sidebar -->
+          <div class="users-sidebar">
+            <div class="users-header">
+              <h3>👥 Active Users</h3>
+              <span id="user-count" class="user-count">0</span>
+            </div>
+            <ul id="users-list" class="users-list"></ul>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <form id="chat-form" class="chat-form">
+            <div class="input-wrapper">
+              <input
+                id="message-input"
+                type="text"
+                placeholder="Type your message..."
+                autocomplete="off"
+              />
+              <div class="input-actions">
+                <button type="button" class="emoji-toggle" title="Add emoji">
+                  😊
+                </button>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-send">Send</button>
+          </form>
+
+          <!-- Emoji Picker -->
+          <div class="emoji-picker" id="emoji-picker">
+            <div class="emoji-grid">
+              <button type="button" data-emoji="😊" class="emoji-btn">😊</button>
+              <button type="button" data-emoji="😂" class="emoji-btn">😂</button>
+              <button type="button" data-emoji="❤️" class="emoji-btn">❤️</button>
+              <button type="button" data-emoji="👍" class="emoji-btn">👍</button>
+              <button type="button" data-emoji="🔥" class="emoji-btn">🔥</button>
+              <button type="button" data-emoji="👏" class="emoji-btn">👏</button>
+              <button type="button" data-emoji="😎" class="emoji-btn">😎</button>
+              <button type="button" data-emoji="🎉" class="emoji-btn">🎉</button>
+              <button type="button" data-emoji="💯" class="emoji-btn">💯</button>
+              <button type="button" data-emoji="🚀" class="emoji-btn">🚀</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='client.js') }}"></script>
+  </body>
+</html>
