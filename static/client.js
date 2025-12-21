@@ -6,7 +6,6 @@ const joinForm = document.getElementById('join-form');
 const chatSection = document.getElementById('chat-section');
 const chatForm = document.getElementById('chat-form');
 const messageInput = document.getElementById('message-input');
-const fileInput = document.getElementById('file-input');
 const messages = document.getElementById('messages');
 const messageContainer = document.getElementById('message-container');
 const emojiPicker = document.getElementById('emoji-picker');
@@ -62,59 +61,22 @@ chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   
   const message = messageInput.value.trim();
-  const file = fileInput.files[0];
   
-  if (!message && !file) {
-    showError('Please enter a message or select a file');
+  if (!message) {
+    showError('Please enter a message');
     return;
   }
   
-  if (file) {
-    handleFileUpload(file);
-  } else {
-    socket.emit('chat message', {
-      room,
-      username,
-      message,
-      type: 'text',
-    });
-  }
+  socket.emit('chat message', {
+    room,
+    username,
+    message,
+    type: 'text',
+  });
   
   messageInput.value = '';
-  fileInput.value = '';
   messageInput.focus();
 });
-
-// File Upload Handler
-function handleFileUpload(file) {
-  if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-    showError('Only images and videos are supported');
-    return;
-  }
-  
-  if (file.size > 50 * 1024 * 1024) { // 50MB limit
-    showError('File size must be less than 50MB');
-    return;
-  }
-  
-  const reader = new FileReader();
-  
-  reader.onload = (event) => {
-    socket.emit('chat message', {
-      room,
-      username,
-      message: `📎 ${file.name}`,
-      type: file.type,
-      content: event.target.result,
-    });
-  };
-  
-  reader.onerror = () => {
-    showError('Error reading file');
-  };
-  
-  reader.readAsDataURL(file);
-}
 
 // Socket Events - Receive Messages
 socket.on('old messages', (msgs) => {
@@ -203,23 +165,7 @@ function displayMessage(msg) {
   // Create message bubble
   const bubbleDiv = document.createElement('div');
   bubbleDiv.classList.add('message-bubble');
-  
-  // Add message content based on type
-  if (msg.type && msg.type.startsWith('image/')) {
-    const img = document.createElement('img');
-    img.src = msg.content;
-    img.classList.add('message-media');
-    img.alt = 'Shared image';
-    bubbleDiv.appendChild(img);
-  } else if (msg.type && msg.type.startsWith('video/')) {
-    const video = document.createElement('video');
-    video.src = msg.content;
-    video.controls = true;
-    video.classList.add('message-media');
-    bubbleDiv.appendChild(video);
-  } else {
-    bubbleDiv.textContent = msg.message || msg.type;
-  }
+  bubbleDiv.textContent = msg.message || msg.type;
   
   contentDiv.appendChild(bubbleDiv);
   
